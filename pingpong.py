@@ -1,12 +1,12 @@
-import random
+import random, time
 
 class Pingpong:	
 	players = {'a': 0, 'b': 0, 'c': 0}
 
 	def play(self, p1, p2):
 		if (random.random() > 0.5):
-			return p1, p2
-		return p2, p1
+			return p1
+		return p2
 
 	def is_end_condition_met(self):
 		print "\tA: " + str(self.players['a'])
@@ -20,19 +20,31 @@ class Pingpong:
 			self.players = {'a': 0, 'b': 0, 'c': 0}
 		return has
 
+def exclude_key(d, key):
+    return {x: d[x] for x in d if x != key}
+
 p = Pingpong()
 match = 1
+iterations = 0
 end = False
+p1, p2 = random.sample(p.players.keys(), 2)
+start_time = time.time()
 while not end:
-	p1, p2 = random.sample(p.players.keys(), 2)
-	winner, loser = p.play(p1, p2)
+	iterations += 1
+	loser = p.play(p1, p2)
 	print "Match:" + str(match)
-	print "Jugaron " + p1 + " y " + p2
-	print "Perdio: " + loser
+	print "In this match: " + p1 + " and " + p2
+	print "Loser: " + str(loser)
 	p.players[p1] += 1
 	p.players[p2] += 1
+	candidates = exclude_key(p.players, loser)
+	p1, p2 = random.sample(candidates, 2)	
 	end = p.is_end_condition_met()	
-	if (p.has_reset()):
+	if p.has_reset():
 		match = 1
 	else:
 		match += 1
+elapsed_time = time.time() - start_time
+elapsed_time = time.strftime("%H:%M:%S", time.gmtime(elapsed_time))
+print "Iterations: " + str(iterations)
+print "Elapsed Time: " + str(elapsed_time)
