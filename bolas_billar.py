@@ -1,3 +1,6 @@
+# Problema: Bolas de Billar.
+# Libro: Detectives
+
 import random
 cant_result = 0
 results = []
